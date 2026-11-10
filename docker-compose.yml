@@ -1,0 +1,41 @@
+# Master Compose Stack for all local MCP and dev services
+# Run all: docker compose up -d
+# Run specific: docker compose up -d <service_name>
+
+services:
+  codebase-memory-mcp:
+    build: ./codebase-memory-mcp
+    image: local/codebase-memory-mcp:latest
+    container_name: codebase-memory-mcp
+    restart: unless-stopped
+    ports:
+      - "9749:8000"
+    tmpfs:
+      - /tmp:exec,mode=1777
+    volumes:
+      - /home/eshan/docker-volumes/codebase-memory/cache:/home/cbm/.cache/codebase-memory-mcp
+      - /home/eshan/coding:/home/eshan/coding
+      - /home/eshan/.gemini/antigravity/scratch:/home/eshan/.gemini/antigravity/scratch
+
+  local-s3:
+    image: luofuxiang/local-s3:latest
+    container_name: local-s3
+    restart: unless-stopped
+    ports:
+      - "9000:80"
+    environment:
+      - MODE=PERSISTENCE
+      - LOCAL_S3_LOGGING_LEVEL=INFO
+    volumes:
+      - /home/eshan/docker-volumes/local-s3/data:/data
+
+  drawdb-mcp:
+    image: ghcr.io/anatoly-lab/drawdb-mcp:latest
+    container_name: drawdb-mcp
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:3000:3000"
+      - "127.0.0.1:8080:80"
+    environment:
+      - VITE_REMOTE_CONTROL_ENABLED=true
+      - VITE_REMOTE_CONTROL_WS=ws://localhost:3000/remote-control

@@ -1,0 +1,14 @@
+services:
+  codebase-memory-mcp:
+    build: .
+    image: local/codebase-memory-mcp:latest
+    container_name: codebase-memory-mcp
+    restart: unless-stopped
+    ports:
+      - "9749:8000"
+    tmpfs:
+      - /tmp:exec,mode=1777
+    volumes:
+      - /home/eshan/docker-volumes/codebase-memory/cache:/home/cbm/.cache/codebase-memory-mcp
+      - /home/eshan/coding:/home/eshan/coding
+      - /home/eshan/.gemini/antigravity/scratch:/home/eshan/.gemini/antigravity/scratch

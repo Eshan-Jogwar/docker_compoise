@@ -1,0 +1,12 @@
+services:
+  local-s3:
+    image: luofuxiang/local-s3:latest
+    container_name: local-s3
+    restart: unless-stopped
+    ports:
+      - "9000:80"
+    environment:
+      - MODE=PERSISTENCE
+      - LOCAL_S3_LOGGING_LEVEL=INFO
+    volumes:
+      - /home/eshan/docker-volumes/local-s3/data:/data

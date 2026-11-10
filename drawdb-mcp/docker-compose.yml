@@ -1,0 +1,11 @@
+services:
+  drawdb-mcp:
+    image: ghcr.io/anatoly-lab/drawdb-mcp:latest
+    container_name: drawdb-mcp
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:3000:3000"  # MCP Streamable HTTP endpoint
+      - "127.0.0.1:8080:80"    # DrawDB Web Diagram UI
+    environment:
+      - VITE_REMOTE_CONTROL_ENABLED=true
+      - VITE_REMOTE_CONTROL_WS=ws://localhost:3000/remote-control
